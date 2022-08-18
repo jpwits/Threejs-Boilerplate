@@ -6,7 +6,7 @@ import { GUI } from './jsm/libs/lil-gui.module.min.js';
 
 let container;
 
-const gui = new GUI()
+const gui = new GUI({ width: 300 })
 const scene = new THREE.Scene()
 let pointer = new THREE.Vector2();
 const light = new THREE.DirectionalLight(0xffffff, 1);
@@ -59,6 +59,24 @@ function onPointerMove(event) {
 }
 
 function ControlGUI() {
+
+    const params = {
+        options: 10,
+        boolean: true,
+        string: 'lil-gui',
+        number: 0,
+        scale: 0.5,
+        color: '#aa00ff',
+        function() { alert( 'hi' ) }
+    };
+
+    gui.add( params, 'options', { Small: 1, Medium: 10, Large: 100 } );
+    gui.add( params, 'boolean' );
+    gui.add( params, 'string' );
+    gui.add( params, 'number' );
+    gui.addColor( params, 'color' );
+    gui.add( params, 'function' ).name( 'Custom Name' );
+    
     const cubeFolder = gui.addFolder('Cube')
     cubeFolder.add(cube.scale, 'x', -5, 5)
     cubeFolder.add(cube.scale, 'y', -5, 5)
@@ -70,33 +88,11 @@ function ControlGUI() {
 
     const folder = gui.addFolder( 'Folder' );
 
-		const folderParams = {
-			number: 0.5,
-			boolean: false,
-			color: '#0cf',
-			function() { alert( 'hi' ) }
-		};
+    const folderParams = {
+        number: 0.5,
+    };
 
-		folder.add( folderParams, 'number', 0, 1 );
-		folder.add( folderParams, 'boolean' );
-		folder.addColor( folderParams, 'color' );
-		folder.add( folderParams, 'function' );
-
-		const params = {
-			options: 10,
-			boolean: true,
-			string: 'lil-gui',
-			number: 0,
-			color: '#aa00ff',
-			function() { console.log( 'hi' ) }
-		};
-
-		gui.add( params, 'options', { Small: 1, Medium: 10, Large: 100 } );
-		gui.add( params, 'boolean' );
-		gui.add( params, 'string' );
-		gui.add( params, 'number' );
-		gui.addColor( params, 'color' );
-		gui.add( params, 'function' ).name( 'Custom Name' );
+    folder.add( folderParams, 'number', 0, 1 );
 }
 
 function animate() {
