@@ -4,37 +4,34 @@ import Stats from './jsm/libs/stats.module.js';
 import { GUI } from './jsm/libs/lil-gui.module.min.js';
 
 
-let container, stats;
-let  raycaster, renderer, camera;
-let  controls, light;
+let container;
 
-
+const gui = new GUI()
 const scene = new THREE.Scene()
+let pointer = new THREE.Vector2();
+const light = new THREE.DirectionalLight(0xffffff, 1);
+const worldAxis = new THREE.AxesHelper(10);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
+const raycaster = new THREE.Raycaster();
+const renderer = new THREE.WebGLRenderer()
+const controls = new OrbitControls(camera, renderer.domElement)
+const stats = Stats();
+
 let cube
 let INTERSECTED;
 let theta = 0;
-const pointer = new THREE.Vector2();
 // const radius = 100;
 
-light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(1, 1, 1).normalize();
 scene.add(light);
-
-let  worldAxis = new THREE.AxesHelper(10);
 scene.add(worldAxis);
 
-camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
 camera.position.z = 5
 
-raycaster = new THREE.Raycaster();
-renderer = new THREE.WebGLRenderer()
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
-controls = new OrbitControls(camera, renderer.domElement)
-
-//CreateCubeBasic();
 CreateCubeColor();
 
 window.addEventListener(
@@ -48,20 +45,11 @@ window.addEventListener(
     false
 )
 
-stats = Stats();
 document.body.appendChild(stats.dom);
 
 document.addEventListener('mousemove', onPointerMove);
 
-// const gui = new GUI()
-// const cubeFolder = gui.addFolder('Cube')
-// cubeFolder.add(cube.scale, 'x', -5, 5)
-// cubeFolder.add(cube.scale, 'y', -5, 5)
-// cubeFolder.add(cube.scale, 'z', -5, 5)
-// cubeFolder.open()
-// const cameraFolder = gui.addFolder('Camera')
-// cameraFolder.add(camera.position, 'z', 0, 10)
-// cameraFolder.open()
+ControlGUI();
 
 function onPointerMove(event) {
 
@@ -70,11 +58,51 @@ function onPointerMove(event) {
 
 }
 
+function ControlGUI() {
+    const cubeFolder = gui.addFolder('Cube')
+    cubeFolder.add(cube.scale, 'x', -5, 5)
+    cubeFolder.add(cube.scale, 'y', -5, 5)
+    cubeFolder.add(cube.scale, 'z', -5, 5)
+    cubeFolder.open()
+    const cameraFolder = gui.addFolder('Camera')
+    cameraFolder.add(camera.position, 'z', 0, 10)
+    cameraFolder.open()
+
+    const folder = gui.addFolder( 'Folder' );
+
+		const folderParams = {
+			number: 0.5,
+			boolean: false,
+			color: '#0cf',
+			function() { alert( 'hi' ) }
+		};
+
+		folder.add( folderParams, 'number', 0, 1 );
+		folder.add( folderParams, 'boolean' );
+		folder.addColor( folderParams, 'color' );
+		folder.add( folderParams, 'function' );
+
+		const params = {
+			options: 10,
+			boolean: true,
+			string: 'lil-gui',
+			number: 0,
+			color: '#aa00ff',
+			function() { console.log( 'hi' ) }
+		};
+
+		gui.add( params, 'options', { Small: 1, Medium: 10, Large: 100 } );
+		gui.add( params, 'boolean' );
+		gui.add( params, 'string' );
+		gui.add( params, 'number' );
+		gui.addColor( params, 'color' );
+		gui.add( params, 'function' ).name( 'Custom Name' );
+}
 
 function animate() {
     requestAnimationFrame(animate)
-        //cube.rotation.x += 0.01
-        //cube.rotation.y += 0.01
+    //cube.rotation.x += 0.01
+    //cube.rotation.y += 0.01
     controls.update()
     render()
     stats.update()
@@ -117,14 +145,7 @@ function render() {
 
 function CreateCubeColor() {
     const piece = new THREE.BoxGeometry(1, 1, 1).toNonIndexed();
-    // const material = new THREE.MeshBasicMaterial({
-    //     vertexColors: true
-    // });
-
     const material = new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff , vertexColors: true})
-
-   // const object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
-
     const positionAttribute = piece.getAttribute('position');
     const colors = [];
 
@@ -149,17 +170,4 @@ function CreateCubeColor() {
     scene.add(cube)
 }
 
-
-function CreateCubeBasic() {
-    const geometry = new THREE.BoxGeometry()
-    const material = new THREE.MeshBasicMaterial({
-        color: 0x00ff00,
-        wireframe: false,
-    })
-
-    //const material = new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
-
-    cube = new THREE.Mesh(geometry, material)
-    scene.add(cube)
-}
 animate()
