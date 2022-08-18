@@ -22,6 +22,8 @@ let INTERSECTED;
 let theta = 0;
 // const radius = 100;
 
+
+
 light.position.set(1, 1, 1).normalize();
 scene.add(light);
 scene.add(worldAxis);
@@ -40,7 +42,7 @@ window.addEventListener(
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
-        animate();//render()
+        render()
     },
     false
 )
@@ -48,6 +50,40 @@ window.addEventListener(
 document.body.appendChild(stats.dom);
 
 document.addEventListener('mousemove', onPointerMove);
+
+// var face_textures = [];
+// function createFaceTextures() {
+//   var i;
+//   for(i = 0; i < 6; i++) {
+//     var dynamictexture = new THREEx.DynamicTexture(512, 512);
+//     dynamictexture.context.font = "bolder 90px verdana";
+//     dynamictexture.texture.needsUpdate = true;
+//     dynamictexture.clear('#d35400').drawText(i.toString(), undefined, 256, 'green');
+//     face_textures.push(dynamictexture);
+//   }
+// }
+
+// createFaceTextures();
+
+// var dynamictexture = new THREEx.DynamicTexture(512, 512);
+// dynamictexture.context.font = "bolder 90px verdana";
+// dynamictexture.texture.needsUpdate = true;
+// dynamictexture.clear('#d35400').drawText('Text', undefined, 256, 'green');
+// var geometry = new THREE.BoxGeometry(2, 2, 2,);
+// var material = new THREE.MeshBasicMaterial({color: 0xffffff, map: dynamictexture.texture, opacity:1, transparent: true});
+
+// var materials = [
+//   new THREE.MeshBasicMaterial({map: face_textures[0].texture}),
+//   new THREE.MeshBasicMaterial({map: face_textures[1].texture}),
+//   new THREE.MeshBasicMaterial({map: face_textures[2].texture}),
+//   new THREE.MeshBasicMaterial({map: face_textures[3].texture}),
+//   new THREE.MeshBasicMaterial({map: face_textures[4].texture}),
+//   new THREE.MeshBasicMaterial({map: face_textures[5].texture})
+// ];
+
+// var cube1 = new THREE.Mesh(geometry, materials);
+// cube1.position = new THREE.Vector3(4,4,4);
+// scene.add(cube1);
 
 ControlGUI();
 
@@ -101,6 +137,7 @@ function animate() {
     //cube.rotation.y += 0.01
     controls.update()
     render()
+    // dynamictexture.texture
     stats.update()
 }
 
