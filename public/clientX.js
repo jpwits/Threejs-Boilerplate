@@ -4,6 +4,7 @@ import { OrbitControls } from './jsm/controls/OrbitControls.js'
 
 let container, stats;
 let camera, scene, raycaster, renderer;
+let cube, controls;
 
 let INTERSECTED;
 let theta = 0;
@@ -29,6 +30,10 @@ function init() {
     scene.add(light);
 
     const geometry = new THREE.BoxGeometry(20, 20, 20);
+    // const material = new THREE.MeshBasicMaterial({
+    //     color: 0x00ff00,
+    //     wireframe: false,
+    // })
 
     for (let i = 0; i < 5; i++) {
 
@@ -57,6 +62,8 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     container.appendChild(renderer.domElement);
 
+    controls = new OrbitControls(camera, renderer.domElement)
+
     stats = new Stats();
     container.appendChild(stats.dom);
 
@@ -65,7 +72,6 @@ function init() {
     //
 
     window.addEventListener('resize', onWindowResize);
-
 }
 
 function onWindowResize() {
@@ -87,12 +93,10 @@ function onPointerMove(event) {
 //
 
 function animate() {
-
     requestAnimationFrame(animate);
-
+    controls.update()
     render();
-    stats.update();
-
+    //stats.update();
 }
 
 function render() {
@@ -135,3 +139,14 @@ function render() {
     renderer.render(scene, camera);
 
 }
+
+// window.addEventListener(
+//     'resize',
+//     () => {
+//         camera.aspect = window.innerWidth / window.innerHeight
+//         camera.updateProjectionMatrix()
+//         renderer.setSize(window.innerWidth, window.innerHeight)
+//         render()
+//     },
+//     false
+// )
